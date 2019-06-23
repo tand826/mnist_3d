@@ -30,13 +30,13 @@ t-SNE reduces the dimension of the input tensor quite well, but takes a long tim
 t-SNE is a tool to visualize high-dimensional data. See [here](https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html) for more information.
 
 # Arguments
-| Arguments | Default | Example |
-|:-----------|:------------|:------------|
-| sample_number | 100 | 1000 |
-| phase | train | test |
-| svd_dimension | 100 | 500 |
-| out_dimension | 2 | 3 |
-| sampled_count | False | (nothing) |
+| Arguments | Default | Example | Description
+|:-----------|:------------|:------------|:----------|
+| sample_number | 100 | 1000 | Number of samples extracted from the whole mnist data. |
+| phase | train | test | Phase of samples. |
+| svd_dimension | 100 | 500 | Output dimension of TruncatedSVD |
+| out_dimension | 2 | 3 | Output dimension of t-SNE |
+| sampled_count | False | (nothing) | Show number of each handwriting nubmers. |
 
 ```python
 python mnist_to_3dplot.py -sn 1000 -p test -sd 500 -od 3 -sc
