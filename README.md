@@ -24,8 +24,10 @@ python mnist_to_3dplot.py
 ```
 
 # What does it do?
-- Truncated SVD
-- T-SNE
+### Truncated SVD
+t-SNE reduces the dimension of the input tensor quite well, but takes a long time when its dimension is high too much. Truncated SVD is recommended to use in that case for speedy processing.
+### t-SNE
+t-SNE is a tool to visualize high-dimensional data. See [here](https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html) for more information.
 
 # Arguments
 | Arguments | Default | Example |
@@ -35,3 +37,7 @@ python mnist_to_3dplot.py
 | svd_dimension | 100 | 500 |
 | out_dimension | 2 | 3 |
 | sampled_count | False | (nothing) |
+
+```python
+python mnist_to_3dplot.py -sn 1000 -p test -sd 500 -od 3 -sc
+```
