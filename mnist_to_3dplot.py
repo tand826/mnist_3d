@@ -19,25 +19,19 @@ def load_imgs(root, phase, count):
 
 def reduce_dim(imgs, labels, dimension):
     imgs_reshaped = np.concatenate(imgs, axis=0)
-    print(imgs_reshaped.shape)
     labels_reshaped = np.concatenate(labels, axis=0)
-    print(labels_reshaped.shape)
 
-    svd = TruncatedSVD(n_components=dimension)
-    imgs_reduced_ = svd.fit_transform(imgs_reshaped)
-
-    imgs_reduced = TSNE(n_components=3,  verbose=1).fit_transform(imgs_reduced_)
-    print(imgs_reduced.shape)
+    imgs_svd = TruncatedSVD(n_components=dimension).fit_transform(imgs_reshaped)
+    imgs_reduced = TSNE(n_components=3,  verbose=1).fit_transform(imgs_svd)
 
     return imgs_reduced, labels_reshaped
 
 
 def plot(imgs, labels):
-    fig = plt.figure()
+    fig = plt.figure(dpi=200)
     ax = fig.add_subplot(111, projection='3d')
-    print(imgs.shape, labels.shape)
     ax.scatter3D(imgs[:, 0], imgs[:, 1], imgs[:, 2], c=labels)
-    fig.show()
+    plt.show()
 
 
 def main():
