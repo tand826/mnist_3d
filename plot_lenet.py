@@ -1,3 +1,6 @@
+## TODO:
+# Loss func to kldivergence
+
 import argparse
 import random
 
@@ -36,7 +39,7 @@ def get_model(name, out_features, device):
 
     if name == "lenet":
         net = LeNet()
-        net.load_state_dict(torch.load("misc/normal.pth"))
+        net.load_state_dict(torch.load("misc/mnist_cnn.pth"))
     elif name == "resnet18":
         net = models.resnet18(pretrained=True)
         net.conv1 = nn.Conv2d(1, 64, 7, stride=2, padding=3, bias=False)
