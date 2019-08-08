@@ -3,7 +3,7 @@ import torch.nn.functional as F
 
 
 class LeNet(nn.Module):
-    def __init__(self):
+    def __init__(self, out_dim):
         super(LeNet, self).__init__()
         self.conv1 = nn.Conv2d(1, 20, 5, 1)
         self.conv2 = nn.Conv2d(20, 50, 5, 1)

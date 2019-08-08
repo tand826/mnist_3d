@@ -1,12 +1,13 @@
+import argparse
 from pathlib import Path
 from PIL import Image
 from misc.model import LeNet
 import torch
-import torch.nn
+import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
-from torchvision import datasets, transforms
+from torchvision import transforms
 
 
 def train(args, model, device, train_loader, optimizer, epoch):
@@ -66,20 +67,30 @@ class MnistDataset(Dataset):
 
 
 def main():
-    class Args():
-        def __init__(self):
-            pass
+    parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
+    parser.add_argument('--batch-size', type=int, default=64, metavar='N',
+                        help='input batch size for training (default: 64)')
+    parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
+                        help='input batch size for testing (default: 1000)')
+    parser.add_argument('--epochs', type=int, default=10, metavar='N',
+                        help='number of epochs to train (default: 10)')
+    parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
+                        help='learning rate (default: 0.01)')
+    parser.add_argument('--momentum', type=float, default=0.5, metavar='M',
+                        help='SGD momentum (default: 0.5)')
+    parser.add_argument('--no-cuda', action='store_true', default=False,
+                        help='disables CUDA training')
+    parser.add_argument('--seed', type=int, default=1, metavar='S',
+                        help='random seed (default: 1)')
+    parser.add_argument('--log-interval', type=int, default=10, metavar='N',
+                        help='how many batches to wait before logging training status')
+    parser.add_argument('--save-model', action='store_true', default=True,
+                        help='For Saving the current Model')
 
-    args = Args()
-    args.batch_size = 64
-    args.test_batch_size = 1000
-    args.epochs = 10
-    args.lr = 0.01
-    args.momentum = 0.5
-    args.no_cuda = False
-    args.seed = 1
-    args.log_interval = 10
-    args.save_model = True
+    parser.add_argument('-od', '--out-dimension', help="output dimension of lenet.",
+                        type=int, default=2, choices=[2, 3])
+
+    args = parser.parse_args()
 
     use_cuda = not args.no_cuda and torch.cuda.is_available()
 
@@ -95,16 +106,15 @@ def main():
     test_dataset = MnistDataset(root_dir="test", transform=transform)
     test_loader = DataLoader(test_dataset, batch_size=args.test_batch_size, shuffle=True, num_workers=4)
 
-    model = LeNet().to(device)
-    model = nn.DataParallel(model)
-    optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
+    model = LeNet(args.out_dimension).to(device)
+    optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
     for epoch in range(1, args.epochs + 1):
         train(args, model, device, train_loader, optimizer, epoch)
         test(args, model, device, test_loader)
 
     if (args.save_model):
-        torch.save(model.state_dict(), "mnist_cnn.pth")
+        torch.save(model.state_dict(), f"lenet.pth")
 
 
 if __name__ == '__main__':

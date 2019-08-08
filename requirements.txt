@@ -3,4 +3,4 @@ numpy==1.16.3
 pathlib==1.0.1
 Pillow==6.0.0
 scikit-learn==0.20.3
-torchvision-0.3.0
+torchvision==0.3.0
