@@ -6,11 +6,11 @@
 
 # Example
 
-- LeNet(2D)
-![2D plot](images/lenet2d.png "lenet2d Normal")
+- LeNet_mod(2D)
+![2D plot](images/lenet_mod2d.png "lenet2d Normal")
 
-- LeNet(3D)
-![3D plot](images/lenet3d.png "lenet3d Normal")
+- LeNet_mod(3D)
+![3D plot](images/lenet_mod3d.png "lenet3d Normal")
 
 - TruncatedSVD -> T-SNE(2D)
 ![2D plot](images/tsvd2d.png "tsvd2d")

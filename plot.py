@@ -6,12 +6,12 @@ from tqdm import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 import torch
-import torch.nn as nn
+import torch.nn.functional as F
 from sklearn.manifold import TSNE
 from sklearn.decomposition import TruncatedSVD
 from mpl_toolkits.mplot3d import Axes3D
 
-from misc.model import LeNet
+from misc.model import LeNet_
 
 
 def load_imgs(root, phase, count):
@@ -32,25 +32,25 @@ def transform_imgs(imgs):
 
 
 def get_model(name, out_dim, device):
-    net = LeNet(out_dim)
-    net.load_state_dict(torch.load(f"misc/lenet.pth"))
+    net = LeNet_(out_dim)
+    net.load_state_dict(torch.load(f"lenet{out_dim}.pth"))
     net.eval().to(device)
     return net
 
 
 def reduce_dim(imgs, mid_dim, out_dim, neural_net, device):
     if neural_net:
-        print(f"[Neural Net] Reducing dimension from {imgs[0].shape[1] * imgs[0].shape[2]} to {10}...")
-        net = get_model(neural_net, 10, device)
+        print(f"[Neural Net] Reducing dimension from {imgs[0].shape[1] * imgs[0].shape[2]} to {out_dim}...")
+        net = get_model(neural_net, out_dim, device)
         imgs = torch.tensor(imgs, dtype=torch.float).to(device)
         imgs_out = []
         for img in tqdm(imgs):
             imgs_out.append(net(img.unsqueeze(0)).cpu().detach())
-        imgs_mid = torch.cat(imgs_out).numpy()
+        imgs_reduced = torch.cat(imgs_out).numpy()
     else:
         imgs_transformed = transform_imgs(imgs)
         imgs_mid = TruncatedSVD(n_components=mid_dim).fit_transform(imgs_transformed)
-    imgs_reduced = TSNE(n_components=out_dim,  verbose=1).fit_transform(imgs_mid)
+        imgs_reduced = TSNE(n_components=out_dim,  verbose=1).fit_transform(imgs_mid)
     return imgs_reduced
 
 
